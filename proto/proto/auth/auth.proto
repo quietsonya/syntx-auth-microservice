@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package auth;
+
+import "google/protobuf/timestamp.proto";
+
+message Tokens {
+    string accessToken = 1;
+    string refreshToken = 2;
+    google.protobuf.Timestamp expiresIn = 3;
+}
+
+message Success {} // ответ после успешного logout
+
+message RegisterRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message RefreshTokensRequest {
+    string refreshToken = 1;
+}
+
+message LogoutRequest {
+    string accessToken = 1;
+}
+
+service AuthService {
+    rpc register(RegisterRequest) returns (Tokens) {}
+    rpc login(LoginRequest) returns (Tokens) {}
+    rpc refresh(RefreshTokensRequest) returns (Tokens) {}
+    rpc logout(LogoutRequest) returns (Success) {}
+}

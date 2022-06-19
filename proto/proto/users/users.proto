@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package users;
+
+message Void {}
+
+message User {
+    string id = 1;
+    string email = 2;
+    string username = 3;
+    string password = 4;
+    string salt = 5;
+}
+
+message UserIdRequest {
+    string userId = 1;
+}
+
+message CreateUserRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+    string salt = 4;
+}
+
+message UpdateUserRequest {
+    string userId = 1;
+    optional string email = 2;
+    optional string username = 3;
+    optional string password = 4;
+    optional string salt = 5;
+}
+
+message DeleteUserRequest {
+    string userId = 1;
+}
+
+service UsersService {
+    rpc getUsers(Void) returns (stream User) {}
+    rpc getUserById(UserIdRequest) returns (User) {}
+    rpc createUser(CreateUserRequest) returns (User) {}
+    rpc updateUser(UpdateUserRequest) returns (User) {}
+    rpc deleteUser(DeleteUserRequest) returns (User) {}
+}

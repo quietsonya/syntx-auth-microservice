@@ -1,0 +1,17 @@
+[package]
+name = "auth"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+proto = { path = "./proto" }
+prost-types = "0.10.1"
+tonic = "0.7.2"
+tokio = "1.19.2"
+pbkdf2 = "0.11.0"
+jsonwebtoken = "8.1.0"
+serde = "1.0.137"
+chrono = "0.4.19"
+rand = "0.8.5"
+redis = "0.21.5"
