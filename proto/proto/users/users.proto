@@ -12,8 +12,12 @@ message User {
     string salt = 5;
 }
 
-message UserIdRequest {
+message UserByIdRequest {
     string userId = 1;
+}
+
+message UserByEmailRequest {
+    string email = 1;
 }
 
 message CreateUserRequest {
@@ -37,7 +41,8 @@ message DeleteUserRequest {
 
 service UsersService {
     rpc getUsers(Void) returns (stream User) {}
-    rpc getUserById(UserIdRequest) returns (User) {}
+    rpc getUserById(UserByIdRequest) returns (User) {}
+    rpc getUserByEmail(UserByEmailRequest) returns (User) {}
     rpc createUser(CreateUserRequest) returns (User) {}
     rpc updateUser(UpdateUserRequest) returns (User) {}
     rpc deleteUser(DeleteUserRequest) returns (User) {}
