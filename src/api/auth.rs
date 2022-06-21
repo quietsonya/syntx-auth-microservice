@@ -45,8 +45,8 @@ pub struct AuthController {
     pub users_service_client: UsersServiceClient<Channel>,
 }
 
-const ACCESS_SECRET: &[u8; 13] = b"access_secret";
-const REFRESH_SECRET: &[u8; 14] = b"refresh_secret";
+const ACCESS_SECRET: &str = "access_secret";
+const REFRESH_SECRET: &str = "refresh_secret";
 
 #[tonic::async_trait]
 impl AuthService for AuthController {
@@ -123,7 +123,7 @@ impl AuthService for AuthController {
 
         let refresh_token_from_request_payload: Result<TokenData<RefreshTokenPayload>, Error> = decode(
             &request.get_ref().refresh_token,
-            &DecodingKey::from_secret(REFRESH_SECRET),
+            &DecodingKey::from_secret(REFRESH_SECRET.as_ref()),
             &Validation::new(Algorithm::HS256)
         );
 
@@ -180,7 +180,7 @@ impl AuthService for AuthController {
         let access_token_from_request: TokenData<AccessTokenPayload>;
         match decode(
             &request.get_ref().access_token,
-            &DecodingKey::from_secret(ACCESS_SECRET),
+            &DecodingKey::from_secret(ACCESS_SECRET.as_ref()),
             &Validation::new(Algorithm::HS256)
         ) {
             Ok(access_token) => access_token_from_request = access_token,
@@ -231,13 +231,13 @@ fn generate_tokens(id: String, email: String, redis_client: &Client) -> Result<T
     let access_token: String = encode(
         &Header::new(Algorithm::HS256),
         &access_token_payload,
-        &EncodingKey::from_secret(ACCESS_SECRET)
+        &EncodingKey::from_secret(ACCESS_SECRET.as_ref())
     ).unwrap();
 
     let refresh_token: String = encode(
         &Header::new(Algorithm::HS256),
         &refresh_token_payload,
-        &EncodingKey::from_secret(REFRESH_SECRET)
+        &EncodingKey::from_secret(REFRESH_SECRET.as_ref())
     ).unwrap();
 
     let expires_in = Option::from(Timestamp {
